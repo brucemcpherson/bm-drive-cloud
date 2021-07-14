@@ -118,7 +118,7 @@ For GCS platform, the bucketname must be in the path.
 Note that you can also copy between the same platform (for example from one folder in drive to another, or from one GCS bucket to another)
 
 ## result
-The result from both the cli and cloud run is a summary of what was copied, along with how long each file took and the size plus the created fileId. This is the result from Cloud Run of copying multiple large files. Note that it seems to run at about 2 megabytes second on cloud run - this example was 2 30mb files simultaneously.
+The result from both the cli and cloud run is a summary of what was copied, along with how long each file took and the size plus the created fileId. This is the result from Cloud Run of copying multiple large files. Note that it seems to run at about 20 megabytes per second on cloud run - this example was 2x30mb files simultaneously. Not sure at this point if parallelism even slows things down. Will need to try with a whole bunch of files simultaneously when I have time.
 ````
 [
 	[{
