@@ -1,0 +1,24 @@
+{
+  "name": "bm-drive-cloud",
+  "version": "1.0.0",
+  "description": "copy files between drive and cloud",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brucemcpherson/bm-drive-cloud.git"
+  },
+  "main": "index.js",
+  "author": "bruce mcpherson",
+  "license": "MIT",
+  "dependencies": {
+    "@google-cloud/storage": "^5.8.3",
+    "delay": "^5.0.0",
+    "express": "^4.17.1",
+    "fs": "^0.0.1-security",
+    "googleapis": "^71.0.0",
+    "mime-types": "^2.1.30",
+    "path": "^0.12.7",
+    "pify": "^5.0.0",
+    "url": "^0.11.0",
+    "yargs": "^17.0.1"
+  }
+}
