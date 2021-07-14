@@ -1,0 +1,10 @@
+Dockerfile
+localindex.js
+node_modules
+*.log
+test
+sa
+jsons
+.gitignore
+.git
+c.sh
