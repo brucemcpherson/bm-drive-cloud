@@ -226,13 +226,13 @@ const getFilesByName = ({ parents, client, name }) => {
  * @param {object} options  options
  * @param {string} options.fileId the file id
  * @param {Drive} options.client the authenticated client
- * @returns {StreamResource} 
+ * @returns {StreamResource}
  */
 const getFilePack = async ({ fileId, client }) => {
-  
   // first we want the contentype
-  const file = await client.files.get({ fileId, fields: "mimeType, id, size" })
-  if (file.status !== 200) throw new Error(`failed to get Drive file ${fileId} ${file.statusText}`)
+  const file = await client.files.get({ fileId, fields: "mimeType, id, size" });
+  if (file.status !== 200)
+    throw new Error(`failed to get Drive file ${fileId} ${file.statusText}`);
 
   // now get a stream to that
   return client.files
@@ -242,7 +242,7 @@ const getFilePack = async ({ fileId, client }) => {
         fileId,
       },
       {
-        responseType: "stream"
+        responseType: "stream",
       }
     )
     .then((resource) => ({
@@ -250,7 +250,7 @@ const getFilePack = async ({ fileId, client }) => {
       fileId: file.data.id,
       stream: resource.data,
       contentType: file.data.mimeType,
-      size: parseInt(file.data.size)
+      size: parseInt(file.data.size),
     }));
 };
 
@@ -274,35 +274,37 @@ const getFolder = async ({ client, path, createIfMissing = true }) => {
   return parent && parent[0];
 };
 
-const createDriveFile = async ({ client, parsed, contentType, content }) => {
-  // first find the parent folder
-  // get the stream
-  const folder = await getFolder({ client, path: parsed.dir });
-  if (!folder.id)
-    throw new Error(`couldnt find/create folder ${parsed.dir} on drive`);
 
-  // now make the file
-  return createFile({
+const streamFileToDrive = async ({ client, parsed, contentType, content }) => {
+  // first get get folder and create if necessary
+  // first find the parent folder
+  const folder = await getFolder({
+    client,
+    path: parsed.dir,
+    createIfMissing: true,
+  });
+  if (!folder.id)
+    throw new Error(`couldnt find or create folder ${parsed.dir} on drive`);
+
+  const file = await createFile({
     client,
     name: parsed.base,
     mimeType: contentType,
     content,
     parents: [folder.id],
   });
-};
-
-const streamFileToDrive = async ({ client, parsed, contentType, content }) => {
-  const file = await createFile({ client, parsed, contentType, content });
-  if (file.status !== 200) throw new Error(`Failed to write file to Drive - ${parsed.pathName} : ${file.statusText}`)
+  if (file.status !== 200)
+    throw new Error(
+      `Failed to write file to Drive - ${parsed.dir} ${parsed.base} : ${file.statusText}`
+    );
 
   return {
     fileId: file.data.id,
     contentType: file.data.mimeType,
     stream: content,
-    file
-  }
-
-}
+    file,
+  };
+};
 
 const getDriveFile = ({ client, parsed }) => {
   // it's possible that we have an ID - so try that first
@@ -344,8 +346,7 @@ module.exports = {
   getFolder,
   getFilesByName,
   createFolder,
-  createDriveFile,
   getDriveFile,
   getFilePack,
-  streamFileToDrive
+  streamFileToDrive,
 };
