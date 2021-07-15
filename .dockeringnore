@@ -7,4 +7,4 @@ sa
 jsons
 .gitignore
 .git
-c.sh
+*.sh
